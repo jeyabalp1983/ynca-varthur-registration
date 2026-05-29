@@ -70,11 +70,16 @@
     </div>
 </div>
 <script>
-const SHEET_URL='https://script.google.com/macros/s/AKfycbx4XKEjLEHvx5zuiYLlOB4I9y3r4jSozMBgDmMCR2Hs2p3Axt7N_fn1ijqtRb886Fj26A/exec';const UPI_ID='0798121A0079936.BQR@kotak';const ACADEMY_NAME='YNCA Varthur';const SIBLING_DISCOUNT=0.05;const centre='yncav';
+const SHEET_URL='https://script.google.com/macros/s/AKfycbxfYO5wOe27v1R5LdWYx7u0djReKHNC8up1aFfoTyA4pgnJby4fB5p3CpWznXFjDK5hBQ/exec';
+const UPI_ID='0798121A0079936.BQR@kotak';
+const ACADEMY_NAME='YNCA Varthur';
+const SIBLING_DISCOUNT=0.05;
+const centre='yncav';
 const qd={Q1:{s:'2026-06-01',e:'2026-09-30',m:4},Q2:{s:'2026-10-01',e:'2026-12-31',m:3},Q3:{s:'2027-01-01',e:'2027-03-31',m:3}};
 const bf={batch1:4250,batch2:4250,batch3:3750,pro:47500};
 const bd={batch1:'Batch 1: Tue,Wed,Thu (4-6:15PM)',batch2:'Batch 2: Fri,Sat,Sun',batch3:'Batch 3: Sat,Sun (7-9:30AM)',pro:'Pro: Wed-Sun (8+Yrs)'};
-const settings=JSON.parse(localStorage.getItem('yncaVSettings')||'{}');const savedLogo=localStorage.getItem('yncaVLogo');
+const settings=JSON.parse(localStorage.getItem('yncaVSettings')||'{}');
+const savedLogo=localStorage.getItem('yncaVLogo');
 if(savedLogo){document.getElementById('hlogo').src=savedLogo;document.getElementById('hlogo').classList.add('show');document.getElementById('flogo').src=savedLogo;document.getElementById('flogo').classList.add('show')}
 document.getElementById('okContact').textContent='📞 '+(settings.phone||'+91-9606743437')+' | 📧 '+(settings.email||'ynsportsforexcellence@gmail.com');
 document.getElementById('sid').value='---';document.getElementById('idDisplay').textContent='YNCAV------';
@@ -179,7 +184,7 @@ async function submitForm(e){
     const needJ=(os&&jo)?document.getElementById('needJersey').checked:true;
     const b=document.getElementById('batchType').value,sd=document.getElementById('startDate').value;
     const r=cf(q,b,sd,hs);const jt=!needJ?0:(document.getElementById('extraJersey').checked?2000:1000);const rf=os?0:500,gt=r.f+jt+rf;
-    const payload={centre:centre,studentName:document.getElementById('sname').value,parentName:document.getElementById('pname').value,age:document.getElementById('age').value,dob:document.getElementById('dob').value,gender:document.getElementById('gender').value,mobile:document.getElementById('mobile').value,email:document.getElementById('email').value,address:document.getElementById('address').value,hasSibling:hs,siblingName:hs?document.getElementById('siblingName').value:'',siblingAge:hs?document.getElementById('siblingAge').value:'',siblingId:hs?document.getElementById('siblingId').value:'',siblingDiscount:hs?'5%':'None',oldStudent:os,quarter:q,planDetail:q==='full'?'Full Season':(qd[q]?.s+' to '+qd[q]?.e),batch:bd[b]||b,startDate:sd,endDate:r.e,coachingFee:r.f,jerseyFee:jt,regFee:rf,totalFee:gt,paymentMode:document.getElementById('paymentMode').value,paidDate:document.getElementById('paidDate').value,receiptFileName:document.getElementById('receipt').files[0]?.name||'N/A',transactionId:document.getElementById('txnId').value||'N/A',experience:document.getElementById('experience').value,playingStyle:document.getElementById('playingStyle').value,medical:document.getElementById('medical').value||'None'};
+    const payload={studentName:document.getElementById('sname').value,parentName:document.getElementById('pname').value,age:document.getElementById('age').value,dob:document.getElementById('dob').value,gender:document.getElementById('gender').value,mobile:document.getElementById('mobile').value,email:document.getElementById('email').value,address:document.getElementById('address').value,hasSibling:hs,siblingName:hs?document.getElementById('siblingName').value:'',siblingAge:hs?document.getElementById('siblingAge').value:'',siblingId:hs?document.getElementById('siblingId').value:'',siblingDiscount:hs?'5%':'None',oldStudent:os,quarter:q,planDetail:q==='full'?'Full Season':(qd[q]?.s+' to '+qd[q]?.e),batch:bd[b]||b,startDate:sd,endDate:r.e,coachingFee:r.f,jerseyFee:jt,regFee:rf,totalFee:gt,paymentMode:document.getElementById('paymentMode').value,paidDate:document.getElementById('paidDate').value,receiptFileName:document.getElementById('receipt').files[0]?.name||'N/A',transactionId:document.getElementById('txnId').value||'N/A',experience:document.getElementById('experience').value,playingStyle:document.getElementById('playingStyle').value,medical:document.getElementById('medical').value||'None'};
     try{
         const resp=await fetch(SHEET_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
         const result=await resp.json();
