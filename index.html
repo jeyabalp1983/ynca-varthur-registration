@@ -14,6 +14,7 @@
         .hlogo{width:45px;height:45px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;display:none}
         .hlogo.show{display:block}
         .htitle{color:#ffd966;font-weight:800;font-size:1rem}
+        .vtag{background:#c41e3a;color:#fff;font-size:.6rem;padding:.15rem .5rem;border-radius:1rem;font-weight:800;letter-spacing:.4px;margin-left:.4rem;vertical-align:middle}
         .idbox{background:#000;color:#00ff41;font-family:'Courier New',monospace;padding:.5rem 1.2rem;border-radius:2rem;font-weight:700;font-size:.85rem;border:2px solid var(--gold);text-shadow:0 0 10px #00ff41}
         .formbox{background:linear-gradient(180deg,#faf6ed,#f5edd6);border-radius:0 0 3rem 3rem;box-shadow:0 25px 50px rgba(0,0,0,0.5),0 0 0 3px var(--gold);padding:2rem;border:2px solid var(--gold);border-top:2px dashed var(--gold)}
         .flogo{text-align:center;margin-bottom:1rem}
@@ -95,7 +96,7 @@
 <body>
 <div class="load" id="loading"><div class="spin"></div><p style="color:#ffd966;margin-top:1rem;font-weight:700">Processing...</p></div>
 <div class="main">
-    <div class="header"><div style="display:flex;align-items:center;gap:.8rem"><img class="hlogo" id="hlogo" src=""><span class="htitle">🏏 YNCA (VARTHUR)</span></div><div class="idbox" id="idDisplay">YNCAV------</div></div>
+    <div class="header"><div style="display:flex;align-items:center;gap:.8rem"><img class="hlogo" id="hlogo" src=""><span class="htitle">🏏 YNCA (VARTHUR)<span class="vtag">engine v4 · round10</span></span></div><div class="idbox" id="idDisplay">YNCAV------</div></div>
     <div class="formbox"><div class="flogo"><img id="flogo" src=""></div><h2>📋 REGISTRATION & PAYMENT - 2026-27</h2>
 
         <div class="ok" id="okMsg">
@@ -151,7 +152,7 @@
             <span class="sec">🏏 BATCH SELECTION</span>
             <div class="inp">
                 <label>Choose Batch <span class="req">*</span> <span id="batchHint" style="font-weight:400;color:#888;font-size:.72rem"></span></label>
-                <div class="batch-grid" id="batchGrid">
+                <div class="batch-grid" id="batchGrid" data-version="4">
                     <div class="batch-card" data-batch="batch1" onclick="selectBatch('batch1')"><span class="bc-badge"></span><div class="bc-name">Batch 1</div><div class="bc-days">Tue · Wed · Thu</div><div class="bc-time">4:00 – 6:15 PM</div><div class="bc-rate" id="bcRate_batch1">—</div><div class="bc-note" id="bcNote_batch1">Select quarter</div></div>
                     <div class="batch-card" data-batch="batch2" onclick="selectBatch('batch2')"><span class="bc-badge"></span><div class="bc-name">Batch 2</div><div class="bc-days">Fri · Sat · Sun</div><div class="bc-time">4:00 – 6:15 PM</div><div class="bc-rate" id="bcRate_batch2">—</div><div class="bc-note" id="bcNote_batch2">Select quarter</div></div>
                     <div class="batch-card" data-batch="batch3" onclick="selectBatch('batch3')"><span class="bc-badge"></span><div class="bc-name">Batch 3</div><div class="bc-days">Sat · Sun</div><div class="bc-time">7:00 – 9:30 AM</div><div class="bc-rate" id="bcRate_batch3">—</div><div class="bc-note" id="bcNote_batch3">Select quarter</div></div>
@@ -205,17 +206,18 @@
             <div class="r2"><div class="inp"><label>Experience</label><select id="experience"><option value="">--</option><option value="beginner">Beginner</option><option value="school">School</option><option value="club">Club</option><option value="district">District</option></select></div><div class="inp"><label>Batting/Bowling</label><input type="text" id="playingStyle"></div></div>
             <div class="inp"><label>Medical</label><input type="text" id="medical"></div>
 
-            <div class="note"><strong>📌 TERMS & CONDITIONS:</strong><ul><li>📅 <strong>Admissions are on Quarterly/Annual basis:</strong> Q1: Jun-Sep | Q2: Oct-Dec | Q3: Jan-Mar</li><li>💰 <strong>Fee is per class:</strong> billed on the actual number of classes in the selected period. Joining within the first 7 days of a month is charged as a full month.</li><li>❌ <strong>No compensatory sessions</strong> for missed training (except on sport injuries)</li><li>🔄 <strong>Batch change</strong> permitted at the start of a new quarter — fee is recalculated at the new batch rate</li><li>👕 <strong>Jersey is MANDATORY</strong> for new students. Old students may reuse existing jersey</li><li>👨‍👩‍👧‍👦 <strong>Sibling Discount:</strong> 5% off on coaching fee for second child</li><li>🏏 <strong>Matches</strong> conducted on weekends. Charges based on ground/overs. That will be communicated prior to match</li><li>💰 <strong>Fees are non-refundable and non-transferable</strong></li></ul><p style="margin-top:.5rem;font-size:.8rem">📞 <strong>+91-9606743437</strong> | 📧 <strong>ynsportsforexcellence@gmail.com</strong><br>📍 <strong>Varthur, Bangalore - 560087</strong></p><div class="consent-box"><label style="display:flex;align-items:flex-start;gap:.8rem;cursor:pointer;font-size:.9rem;color:#2d4a22;line-height:1.4;"><input type="checkbox" id="consent" required style="width:22px;height:22px;margin-top:3px;accent-color:#c41e3a;flex-shrink:0;"><span><strong>✅ I agree that, I read the medical & playing consent form provided in academy and agree to that. I also agree to all terms & conditions above.</strong></span></label></div></div>
+            <div class="note"><strong>📌 TERMS & CONDITIONS:</strong><ul><li>📅 <strong>Admissions are on Quarterly/Annual basis:</strong> Q1: Jun-Sep | Q2: Oct-Dec | Q3: Jan-Mar</li><li>💰 <strong>Fee is per class:</strong> billed on the actual number of classes in the selected period. Joining within the first 7 days of a month is charged as a full month. All fees are rounded to the nearest ₹10.</li><li>❌ <strong>No compensatory sessions</strong> for missed training (except on sport injuries)</li><li>🔄 <strong>Batch change</strong> permitted at the start of a new quarter — fee is recalculated at the new batch rate</li><li>👕 <strong>Jersey is MANDATORY</strong> for new students. Old students may reuse existing jersey</li><li>👨‍👩‍👧‍👦 <strong>Sibling Discount:</strong> 5% off on coaching fee for second child</li><li>🏏 <strong>Matches</strong> conducted on weekends. Charges based on ground/overs. That will be communicated prior to match</li><li>💰 <strong>Fees are non-refundable and non-transferable</strong></li></ul><p style="margin-top:.5rem;font-size:.8rem">📞 <strong>+91-9606743437</strong> | 📧 <strong>ynsportsforexcellence@gmail.com</strong><br>📍 <strong>Varthur, Bangalore - 560087</strong></p><div class="consent-box"><label style="display:flex;align-items:flex-start;gap:.8rem;cursor:pointer;font-size:.9rem;color:#2d4a22;line-height:1.4;"><input type="checkbox" id="consent" required style="width:22px;height:22px;margin-top:3px;accent-color:#c41e3a;flex-shrink:0;"><span><strong>✅ I agree that, I read the medical & playing consent form provided in academy and agree to that. I also agree to all terms & conditions above.</strong></span></label></div></div>
             <button type="submit" class="btn" id="submitBtn">🏏 SUBMIT</button>
         </div></form>
     </div>
 </div>
 <script>
 /* =====================================================================
-   YNCA VARTHUR — Per-class fee engine (pro-rata) · quarterly cards
+   YNCA VARTHUR — Fee engine v4  ·  per-class counting + round-to-₹10
    ===================================================================== */
+console.log('[YNCA] engine v4 · per-class + round-to-10 active');
 
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbykjV6VAM7qV7wJiLFlZJ5IRTRDMR_nLsnCPwTdN9nL4EZqNd644bmHIAXXQzWrlIWWbA/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyPEaHJEUsJVznaKvhV7fgOUErz5cAidiQzVCQAJswaNdt3lwL2AIH83WR-xWMfpY9qZA/exec';
 const ACADEMY_NAME = 'YNCA Varthur';
 const SIBLING_DISCOUNT = 0.05;
 
@@ -226,14 +228,13 @@ const LOOKUP_RETRY = 2;
 const LOOKUP_RETRY_DELAY = 800;
 const WARM_ON_LOAD = true;
 
-/* Quarterly periods */
 const qd = {
     Q1:{s:'2026-06-01', e:'2026-09-30'},
     Q2:{s:'2026-10-01', e:'2026-12-31'},
     Q3:{s:'2027-01-01', e:'2027-03-31'}
 };
 
-/* Per-class rates — never displayed raw on cards */
+/* Per-class rates. Day codes: 0=Sun,1=Mon,2=Tue,3=Wed,4=Thu,5=Fri,6=Sat */
 const BATCH = {
     batch1:{days:[2,3,4],    rate:355, name:'Batch 1', daysTxt:'Tue, Wed, Thu'},
     batch2:{days:[5,6,0],    rate:355, name:'Batch 2', daysTxt:'Fri, Sat, Sun'},
@@ -269,8 +270,11 @@ function cfgOk(){ return SHEET_URL && SHEET_URL.indexOf('YOUR_APPS_SCRIPT_URL') 
 function fmt(n){ return '₹' + (Number(n)||0).toLocaleString('en-IN'); }
 
 /* =====================================================================
-   FIXED QUARTER END DATES
+   Round to nearest ₹10 — applies to ALL coaching fees and discounts
    ===================================================================== */
+function round10(n) { return Math.round((Number(n) || 0) / 10) * 10; }
+
+/* Fixed quarter end dates */
 function getQuarterEndDate(q) {
     if (q === 'Q1')   return '2026-09-30';
     if (q === 'Q2')   return '2026-12-31';
@@ -284,15 +288,13 @@ function formatEndDate(q) {
     return new Date(d).toLocaleDateString('en-IN', { year:'numeric', month:'long', day:'numeric' });
 }
 
-/* =====================================================================
-   FEE ENGINE — per-class counting with 7-day grace
-   ===================================================================== */
+/* ============ PER-CLASS FEE ENGINE (7-day grace · round-to-10) ============ */
 function quarterFee(q, b, sd) {
     const x = qd[q];
     if (!x) return { f:0, e:'', classes:0, rate:0 };
     if (b === 'pro') return { f: BATCH.pro.season, e:'2027-03-31', classes:0, rate:0 };
 
-    const rate = BATCH[b].rate || 355;
+    const rate = BATCH[b].rate;
     const qs = new Date(x.s), qe = new Date(x.e), jd = new Date(sd);
     if (jd > qe) return { f:0, e:x.e, classes:0, rate:rate };
 
@@ -320,19 +322,22 @@ function quarterFee(q, b, sd) {
         }
         cur.setMonth(cur.getMonth() + 1);
     }
-    return { f: totalClasses * rate, e: x.e, classes: totalClasses, rate: rate };
+    /* ← round to nearest ₹10 */
+    return { f: round10(totalClasses * rate), e: x.e, classes: totalClasses, rate: rate };
 }
 
 function cf(q, b, sd, hs, paid) {
     paid = paid || [];
     const empty = { f:0, e:'', gross:0, seasonDisc:0, sibDisc:0, classes:0, rate:0 };
     if (!q || !b || !sd) return empty;
+
     if (b === 'pro') {
         const gross = BATCH.pro.season;
         let sibDisc = 0, net = gross;
-        if (hs) { sibDisc = Math.round(gross * 0.05); net = gross - sibDisc; }
-        return { f:net, e:'2027-03-31', gross:gross, seasonDisc:0, sibDisc:sibDisc, classes:0, rate:0 };
+        if (hs) { sibDisc = round10(gross * 0.05); net = gross - sibDisc; }
+        return { f: net, e:'2027-03-31', gross:gross, seasonDisc:0, sibDisc:sibDisc, classes:0, rate:0 };
     }
+
     let keys;
     if (q === 'full') keys = ['Q1','Q2','Q3'].filter(function(k){ return paid.indexOf(k) === -1; });
     else { if (paid.indexOf(q) > -1) return empty; keys = [q]; }
@@ -346,14 +351,26 @@ function cf(q, b, sd, hs, paid) {
         rate = r.rate;
         if (r.e) end = r.e;
     });
+
+    gross = round10(gross);
+
     let seasonDisc = 0, afterSeason = gross;
-    if (q === 'full' && keys.length > 1) { seasonDisc = Math.round(gross * 0.05); afterSeason = gross - seasonDisc; }
+    if (q === 'full' && keys.length > 1) {
+        seasonDisc = round10(gross * 0.05);
+        afterSeason = gross - seasonDisc;
+    }
+
     let sibDisc = 0, net = afterSeason;
-    if (hs) { sibDisc = Math.round(afterSeason * 0.05); net = afterSeason - sibDisc; }
-    return { f:net, e:end, gross:gross, seasonDisc:seasonDisc, sibDisc:sibDisc, classes:classes, rate:rate };
+    if (hs) {
+        sibDisc = round10(afterSeason * 0.05);
+        net = afterSeason - sibDisc;
+    }
+    net = round10(net);
+
+    return { f: net, e: end, gross: gross, seasonDisc: seasonDisc, sibDisc: sibDisc, classes: classes, rate: rate };
 }
 
-/* ================= QUARTER DROPDOWN ================= */
+/* ============ QUARTER DROPDOWN ============ */
 function rebuildQuarterOptions(paid) {
     paid = paid || [];
     const sel = document.getElementById('quarter');
@@ -374,7 +391,7 @@ function rebuildQuarterOptions(paid) {
     }).join('');
 }
 
-/* ================= BATCH CARDS — QUARTERLY TOTALS ONLY ================= */
+/* ============ BATCH CARDS — QUARTERLY TOTALS ============ */
 function getDisplayQuarter() {
     const sel = document.getElementById('quarter').value;
     if (sel && sel !== 'full') return sel;
@@ -409,7 +426,7 @@ function updateBatchCardFees() {
                 const r = quarterFee(k, b, qd[k].s);
                 total += r.f; classes += r.classes;
             });
-            const disc = keys.length > 1 ? Math.round(total * 0.05) : 0;
+            const disc = keys.length > 1 ? round10(total * 0.05) : 0;
             rateEl.innerHTML = fmt(total - disc) + ' <small>/ season</small>';
             noteEl.textContent = classes + ' classes' + (disc ? ' · 5% off' : '');
         } else {
@@ -444,7 +461,7 @@ function updateBatchCards() {
     updateBatchCardFees();
 }
 
-/* ================= FAST LOOKUP ================= */
+/* ============ FAST LOOKUP ============ */
 function getCachedLookup(email, mobile) {
     try {
         const k = LOOKUP_CACHE_PREFIX + (email || '') + '|' + (mobile || '');
@@ -622,7 +639,7 @@ function renderExisting(list, fromCache, meta) {
     }).join('');
 }
 
-/* ================= RENEWAL MODE ================= */
+/* ============ RENEWAL MODE ============ */
 function lockField(id, val) {
     const el = document.getElementById(id);
     if (!el) return;
@@ -690,7 +707,6 @@ function exitRenewal() {
     updateAll();
 }
 
-/* ================= QR ================= */
 function genQR(am, qt) {
     const qr = document.getElementById('qrcode');
     const ul = document.getElementById('upiLink');
@@ -711,7 +727,6 @@ function genQR(am, qt) {
     ul.appendChild(a);
 }
 
-/* ================= MAIN UPDATE ================= */
 function updateAll() {
     const q  = document.getElementById('quarter').value;
     const b  = document.getElementById('batchType').value;
@@ -764,7 +779,6 @@ function updateLedger(r, jt, rf, gt, b, q, sd) {
     }
     document.getElementById('lgPeriod').textContent = periodTxt;
 
-    /* Rate & classes — hidden for pro */
     const rateRow = document.getElementById('lgRateRow');
     const classesRow = document.getElementById('lgClassesRow');
     if (b === 'pro') {
@@ -796,7 +810,7 @@ function updateLedger(r, jt, rf, gt, b, q, sd) {
 
     let note = 'All fees are inclusive of applicable GST. ';
     if (b !== 'pro' && r.rate && r.classes) {
-        note += 'Coaching = ' + r.classes + ' class' + (r.classes > 1 ? 'es' : '') + ' × ' + fmt(r.rate) + '. ';
+        note += 'Coaching = ' + r.classes + ' class' + (r.classes > 1 ? 'es' : '') + ' × ' + fmt(r.rate) + ' (rounded to ₹10). ';
     }
     if (q === 'full') note += 'Season discount of 5% already applied. ';
     if (RENEWAL && RENEWAL.batchKey && b && b !== RENEWAL.batchKey) note += 'Batch change: fee recalculated for the new batch.';
@@ -844,7 +858,6 @@ function removeReceipt() {
     document.getElementById('uploadPH').style.display = 'block';
 }
 
-/* ================= SUBMIT ================= */
 async function submitForm(e) {
     e.preventDefault();
     if (!document.getElementById('consent').checked) { alert('Please agree to terms.'); return false; }
@@ -1005,6 +1018,15 @@ window.onload = function() {
                 .catch(function(){});
         }, 300);
     }
+    /* ===== DEBUG — verify engine & rounding ===== */
+    try {
+        const s1 = quarterFee('Q1', 'batch1', '2026-06-01');
+        const s2 = quarterFee('Q1', 'batch2', '2026-06-01');
+        const s3 = quarterFee('Q1', 'batch3', '2026-06-01');
+        console.log('[YNCA] Q1 Batch 1:', s1, '→ raw=' + (s1.classes * s1.rate) + ' rounded=' + s1.f);
+        console.log('[YNCA] Q1 Batch 2:', s2, '→ raw=' + (s2.classes * s2.rate) + ' rounded=' + s2.f);
+        console.log('[YNCA] Q1 Batch 3:', s3, '→ raw=' + (s3.classes * s3.rate) + ' rounded=' + s3.f);
+    } catch (e) { console.error('[YNCA] Sample calc failed:', e); }
 };
 
 document.getElementById('quarter').addEventListener('change', function() {
