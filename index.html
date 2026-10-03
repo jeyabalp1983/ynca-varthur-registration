@@ -181,6 +181,8 @@
                 </div>
                 <div class="lg-sep"></div>
                 <div class="lg-body">
+                    <div class="lg-row" id="lgRateRow"><span>Rate per class</span><b id="lgRate">₹0</b></div>
+                    <div class="lg-row" id="lgClassesRow"><span>Classes in period</span><b id="lgClasses">0</b></div>
                     <div class="lg-row"><span>Coaching Fee (gross)</span><b id="lgGross">₹0</b></div>
                     <div class="lg-row lg-sub" id="lgSeasonRow" style="display:none"><span>Season Discount (5%)</span><b id="lgSeason">—</b></div>
                     <div class="lg-row lg-sub" id="lgSibRow" style="display:none"><span>Sibling Discount (5%)</span><b id="lgSib">—</b></div>
@@ -203,17 +205,17 @@
             <div class="r2"><div class="inp"><label>Experience</label><select id="experience"><option value="">--</option><option value="beginner">Beginner</option><option value="school">School</option><option value="club">Club</option><option value="district">District</option></select></div><div class="inp"><label>Batting/Bowling</label><input type="text" id="playingStyle"></div></div>
             <div class="inp"><label>Medical</label><input type="text" id="medical"></div>
 
-            <div class="note"><strong>📌 TERMS & CONDITIONS:</strong><ul><li>📅 <strong>Admissions are on Quarterly/Annual basis:</strong> Q1: Jun-Sep | Q2: Oct-Dec | Q3: Jan-Mar</li><li>💰 <strong>Fees are billed on a quarterly basis.</strong> Joining within the first 7 days of a month is charged as a full month.</li><li>❌ <strong>No compensatory sessions</strong> for missed training (except on sport injuries)</li><li>🔄 <strong>Batch change</strong> permitted at the start of a new quarter — fee is recalculated at the new batch rate</li><li>👕 <strong>Jersey is MANDATORY</strong> for new students. Old students may reuse existing jersey</li><li>👨‍👩‍👧‍👦 <strong>Sibling Discount:</strong> 5% off on coaching fee for second child</li><li>🏏 <strong>Matches</strong> conducted on weekends. Charges based on ground/overs. That will be communicated prior to match</li><li>💰 <strong>Fees are non-refundable and non-transferable</strong></li></ul><p style="margin-top:.5rem;font-size:.8rem">📞 <strong>+91-9606743437</strong> | 📧 <strong>ynsportsforexcellence@gmail.com</strong><br>📍 <strong>Varthur, Bangalore - 560087</strong></p><div class="consent-box"><label style="display:flex;align-items:flex-start;gap:.8rem;cursor:pointer;font-size:.9rem;color:#2d4a22;line-height:1.4;"><input type="checkbox" id="consent" required style="width:22px;height:22px;margin-top:3px;accent-color:#c41e3a;flex-shrink:0;"><span><strong>✅ I agree that, I read the medical & playing consent form provided in academy and agree to that. I also agree to all terms & conditions above.</strong></span></label></div></div>
+            <div class="note"><strong>📌 TERMS & CONDITIONS:</strong><ul><li>📅 <strong>Admissions are on Quarterly/Annual basis:</strong> Q1: Jun-Sep | Q2: Oct-Dec | Q3: Jan-Mar</li><li>💰 <strong>Fee is per class:</strong> billed on the actual number of classes in the selected period. Joining within the first 7 days of a month is charged as a full month.</li><li>❌ <strong>No compensatory sessions</strong> for missed training (except on sport injuries)</li><li>🔄 <strong>Batch change</strong> permitted at the start of a new quarter — fee is recalculated at the new batch rate</li><li>👕 <strong>Jersey is MANDATORY</strong> for new students. Old students may reuse existing jersey</li><li>👨‍👩‍👧‍👦 <strong>Sibling Discount:</strong> 5% off on coaching fee for second child</li><li>🏏 <strong>Matches</strong> conducted on weekends. Charges based on ground/overs. That will be communicated prior to match</li><li>💰 <strong>Fees are non-refundable and non-transferable</strong></li></ul><p style="margin-top:.5rem;font-size:.8rem">📞 <strong>+91-9606743437</strong> | 📧 <strong>ynsportsforexcellence@gmail.com</strong><br>📍 <strong>Varthur, Bangalore - 560087</strong></p><div class="consent-box"><label style="display:flex;align-items:flex-start;gap:.8rem;cursor:pointer;font-size:.9rem;color:#2d4a22;line-height:1.4;"><input type="checkbox" id="consent" required style="width:22px;height:22px;margin-top:3px;accent-color:#c41e3a;flex-shrink:0;"><span><strong>✅ I agree that, I read the medical & playing consent form provided in academy and agree to that. I also agree to all terms & conditions above.</strong></span></label></div></div>
             <button type="submit" class="btn" id="submitBtn">🏏 SUBMIT</button>
         </div></form>
     </div>
 </div>
 <script>
 /* =====================================================================
-   YNCA VARTHUR — Final Front-end  (quarterly cards · fixed end dates)
+   YNCA VARTHUR — Per-class fee engine (pro-rata) · quarterly cards
    ===================================================================== */
 
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyN9u1LAB2YV7unl6OL5GRcNpp4SMmIcZ4S0NDnG4zl1Ptgdl0b7_b3vpZtUd75bBsOaQ/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbykjV6VAM7qV7wJiLFlZJ5IRTRDMR_nLsnCPwTdN9nL4EZqNd644bmHIAXXQzWrlIWWbA/exec';
 const ACADEMY_NAME = 'YNCA Varthur';
 const SIBLING_DISCOUNT = 0.05;
 
@@ -224,19 +226,19 @@ const LOOKUP_RETRY = 2;
 const LOOKUP_RETRY_DELAY = 800;
 const WARM_ON_LOAD = true;
 
-/* Quarterly periods with month counts (Q1=4 months, Q2=3, Q3=3) */
+/* Quarterly periods */
 const qd = {
-    Q1:{s:'2026-06-01', e:'2026-09-30', m:4},
-    Q2:{s:'2026-10-01', e:'2026-12-31', m:3},
-    Q3:{s:'2027-01-01', e:'2027-03-31', m:3}
+    Q1:{s:'2026-06-01', e:'2026-09-30'},
+    Q2:{s:'2026-10-01', e:'2026-12-31'},
+    Q3:{s:'2027-01-01', e:'2027-03-31'}
 };
 
-/* YNCA monthly rates — never shown raw */
+/* Per-class rates — never displayed raw on cards */
 const BATCH = {
-    batch1:{days:[2,3,4],    monthly:4250, name:'Batch 1', daysTxt:'Tue, Wed, Thu'},
-    batch2:{days:[5,6,0],    monthly:4250, name:'Batch 2', daysTxt:'Fri, Sat, Sun'},
-    batch3:{days:[6,0],      monthly:3750, name:'Batch 3', daysTxt:'Sat, Sun'},
-    pro:   {days:[3,4,5,6,0],monthly:0,    name:'Pro',     daysTxt:'Wed-Sun (5 days)', season:47500}
+    batch1:{days:[2,3,4],    rate:355, name:'Batch 1', daysTxt:'Tue, Wed, Thu'},
+    batch2:{days:[5,6,0],    rate:355, name:'Batch 2', daysTxt:'Fri, Sat, Sun'},
+    batch3:{days:[6,0],      rate:469, name:'Batch 3', daysTxt:'Sat, Sun'},
+    pro:   {days:[3,4,5,6,0],rate:0,   name:'Pro',     daysTxt:'Wed-Sun (5 days)', season:47500}
 };
 
 const bd = {
@@ -282,76 +284,65 @@ function formatEndDate(q) {
     return new Date(d).toLocaleDateString('en-IN', { year:'numeric', month:'long', day:'numeric' });
 }
 
-/* ================= FEE ENGINE (7-day grace) ================= */
-function countBatchDaysInMonth(year, month, batch, fromDate) {
-    const days = BATCH[batch].days;
-    let count = 0;
-    const startDay = fromDate ? fromDate.getDate() : 1;
-    const date = new Date(year, month, startDay);
-    const lastDay = new Date(year, month + 1, 0).getDate();
-    for (let d = startDay; d <= lastDay; d++) {
-        date.setDate(d);
-        if (days.indexOf(date.getDay()) > -1) count++;
-    }
-    return count;
-}
-
+/* =====================================================================
+   FEE ENGINE — per-class counting with 7-day grace
+   ===================================================================== */
 function quarterFee(q, b, sd) {
     const x = qd[q];
-    if (!x) return { f:0, e:'', rate:0 };
-    if (b === 'pro') return { f: BATCH.pro.season, e:'2027-03-31', rate:0 };
-    const rate = BATCH[b].monthly || 4250;
+    if (!x) return { f:0, e:'', classes:0, rate:0 };
+    if (b === 'pro') return { f: BATCH.pro.season, e:'2027-03-31', classes:0, rate:0 };
+
+    const rate = BATCH[b].rate || 355;
     const qs = new Date(x.s), qe = new Date(x.e), jd = new Date(sd);
-    if (jd > qe) return { f:0, e:x.e, rate:rate };
+    if (jd > qe) return { f:0, e:x.e, classes:0, rate:rate };
 
     const effStart = jd > qs ? jd : qs;
     const days = BATCH[b].days;
-    let total = 0;
+    let totalClasses = 0;
     let cur = new Date(effStart.getFullYear(), effStart.getMonth(), 1);
     const lastMonth = new Date(qe.getFullYear(), qe.getMonth(), 1);
+
     while (cur <= lastMonth) {
         const y = cur.getFullYear(), m = cur.getMonth();
         let startDay = 1;
         if (y === effStart.getFullYear() && m === effStart.getMonth()) {
+            /* 7-day grace: joining day 1–7 ⇒ full month */
             startDay = (effStart.getDate() <= 7) ? 1 : effStart.getDate();
         }
         const lastDayOfMonth = new Date(y, m + 1, 0).getDate();
         let endDay = lastDayOfMonth;
         if (y === qe.getFullYear() && m === qe.getMonth()) endDay = Math.min(endDay, qe.getDate());
 
-        if (startDay === 1) {
-            total += rate;
-        } else {
-            const totalDaysInMonth = countBatchDaysInMonth(y, m, b, null);
-            const attended = countBatchDaysInMonth(y, m, b, new Date(y, m, startDay));
-            if (totalDaysInMonth > 0) {
-                total += Math.round(rate * (attended / totalDaysInMonth) / 100) * 100;
-            }
+        const d = new Date(y, m, startDay);
+        for (let day = startDay; day <= endDay; day++) {
+            d.setDate(day);
+            if (days.indexOf(d.getDay()) > -1) totalClasses++;
         }
         cur.setMonth(cur.getMonth() + 1);
     }
-    return { f: total, e: x.e, rate: rate };
+    return { f: totalClasses * rate, e: x.e, classes: totalClasses, rate: rate };
 }
 
 function cf(q, b, sd, hs, paid) {
     paid = paid || [];
-    const empty = { f:0, e:'', gross:0, seasonDisc:0, sibDisc:0, rate:0 };
+    const empty = { f:0, e:'', gross:0, seasonDisc:0, sibDisc:0, classes:0, rate:0 };
     if (!q || !b || !sd) return empty;
     if (b === 'pro') {
         const gross = BATCH.pro.season;
         let sibDisc = 0, net = gross;
         if (hs) { sibDisc = Math.round(gross * 0.05); net = gross - sibDisc; }
-        return { f:net, e:'2027-03-31', gross:gross, seasonDisc:0, sibDisc:sibDisc, rate:0 };
+        return { f:net, e:'2027-03-31', gross:gross, seasonDisc:0, sibDisc:sibDisc, classes:0, rate:0 };
     }
     let keys;
     if (q === 'full') keys = ['Q1','Q2','Q3'].filter(function(k){ return paid.indexOf(k) === -1; });
     else { if (paid.indexOf(q) > -1) return empty; keys = [q]; }
     if (!keys.length) return empty;
 
-    let gross = 0, end = '', rate = 0;
+    let gross = 0, classes = 0, end = '', rate = 0;
     keys.forEach(function(k){
         const r = quarterFee(k, b, sd);
         gross += r.f;
+        classes += r.classes;
         rate = r.rate;
         if (r.e) end = r.e;
     });
@@ -359,7 +350,7 @@ function cf(q, b, sd, hs, paid) {
     if (q === 'full' && keys.length > 1) { seasonDisc = Math.round(gross * 0.05); afterSeason = gross - seasonDisc; }
     let sibDisc = 0, net = afterSeason;
     if (hs) { sibDisc = Math.round(afterSeason * 0.05); net = afterSeason - sibDisc; }
-    return { f:net, e:end, gross:gross, seasonDisc:seasonDisc, sibDisc:sibDisc, rate:rate };
+    return { f:net, e:end, gross:gross, seasonDisc:seasonDisc, sibDisc:sibDisc, classes:classes, rate:rate };
 }
 
 /* ================= QUARTER DROPDOWN ================= */
@@ -383,7 +374,7 @@ function rebuildQuarterOptions(paid) {
     }).join('');
 }
 
-/* ================= BATCH CARDS — QUARTERLY ONLY ================= */
+/* ================= BATCH CARDS — QUARTERLY TOTALS ONLY ================= */
 function getDisplayQuarter() {
     const sel = document.getElementById('quarter').value;
     if (sel && sel !== 'full') return sel;
@@ -413,18 +404,18 @@ function updateBatchCardFees() {
         if (sel === 'full') {
             const paid = RENEWAL ? (RENEWAL.quartersPaid || []) : [];
             const keys = ['Q1','Q2','Q3'].filter(function(k){ return paid.indexOf(k) === -1; });
-            let total = 0;
+            let total = 0, classes = 0;
             keys.forEach(function(k){
                 const r = quarterFee(k, b, qd[k].s);
-                total += r.f;
+                total += r.f; classes += r.classes;
             });
             const disc = keys.length > 1 ? Math.round(total * 0.05) : 0;
             rateEl.innerHTML = fmt(total - disc) + ' <small>/ season</small>';
-            noteEl.textContent = keys.length + ' quarter' + (keys.length>1?'s':'') + (disc ? ' · 5% off applied' : '');
+            noteEl.textContent = classes + ' classes' + (disc ? ' · 5% off' : '');
         } else {
             const r = quarterFee(q, b, qd[q].s);
             rateEl.innerHTML = fmt(r.f) + ' <small>/ ' + q + '</small>';
-            noteEl.textContent = qd[q].m + ' months · ' + q + ' 2026' + (q === 'Q3' ? '–27' : '');
+            noteEl.textContent = r.classes + ' classes · ' + q + ' 2026' + (q === 'Q3' ? '–27' : '');
         }
     });
 }
@@ -746,8 +737,6 @@ function updateAll() {
     const gt = r.f + jt + rf;
 
     document.getElementById('regDisp').textContent = 'Reg: ' + fmt(rf);
-
-    /* FIXED end date */
     document.getElementById('endDate').value = formatEndDate(q);
 
     updateBatchCards();
@@ -775,6 +764,19 @@ function updateLedger(r, jt, rf, gt, b, q, sd) {
     }
     document.getElementById('lgPeriod').textContent = periodTxt;
 
+    /* Rate & classes — hidden for pro */
+    const rateRow = document.getElementById('lgRateRow');
+    const classesRow = document.getElementById('lgClassesRow');
+    if (b === 'pro') {
+        rateRow.style.display = 'none';
+        classesRow.style.display = 'none';
+    } else {
+        rateRow.style.display = 'flex';
+        classesRow.style.display = 'flex';
+        document.getElementById('lgRate').textContent = r.rate ? fmt(r.rate) + ' / class' : '—';
+        document.getElementById('lgClasses').textContent = r.classes || 0;
+    }
+
     document.getElementById('lgGross').textContent   = fmt(r.gross || 0);
     document.getElementById('lgCoaching').textContent = fmt(r.f);
     document.getElementById('lgJersey').textContent  = fmt(jt);
@@ -793,6 +795,9 @@ function updateLedger(r, jt, rf, gt, b, q, sd) {
     else { modeEl.textContent = 'New Registration'; modeEl.classList.remove('renewal'); }
 
     let note = 'All fees are inclusive of applicable GST. ';
+    if (b !== 'pro' && r.rate && r.classes) {
+        note += 'Coaching = ' + r.classes + ' class' + (r.classes > 1 ? 'es' : '') + ' × ' + fmt(r.rate) + '. ';
+    }
     if (q === 'full') note += 'Season discount of 5% already applied. ';
     if (RENEWAL && RENEWAL.batchKey && b && b !== RENEWAL.batchKey) note += 'Batch change: fee recalculated for the new batch.';
     if (sd) {
@@ -905,6 +910,8 @@ async function submitForm(e) {
         batch: bd[b] || b,
         batchKey: b,
         selectedDays: BATCH[b] ? BATCH[b].daysTxt : '',
+        ratePerClass: r.rate || 0,
+        classesCount: r.classes || 0,
         startDate: sd,
         endDate: getQuarterEndDate(q),
         coachingFee: r.f,
@@ -942,7 +949,12 @@ async function submitForm(e) {
             document.getElementById('entityName').innerHTML = '<strong>YN Sports for Excellence</strong><br>(Subsidiary of WoW Fashion & Sports)';
             document.getElementById('centreNameDisplay').textContent = ACADEMY_NAME;
 
-            let breakup = 'Coaching Fee (gross): ' + fmt(r.gross) + '<br>';
+            let breakup = '';
+            if (b !== 'pro' && r.rate && r.classes) {
+                breakup += 'Rate per class: ' + fmt(r.rate) + '<br>' +
+                           'Classes in period: ' + r.classes + '<br>';
+            }
+            breakup += 'Coaching Fee (gross): ' + fmt(r.gross) + '<br>';
             if (r.seasonDisc > 0) breakup += 'Season Discount (5%): -' + fmt(r.seasonDisc) + '<br>';
             if (r.sibDisc > 0)    breakup += 'Sibling Discount (5%): -' + fmt(r.sibDisc) + '<br>';
             breakup += 'Net Coaching (incl. 18% GST): ' + fmt(r.f) + '<br>';
